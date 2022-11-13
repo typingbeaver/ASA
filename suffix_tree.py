@@ -1,10 +1,11 @@
 from json import dumps as json_dumps
-
+import collections
 
 class SuffixTree:
     # ~ I'm a cheap ol' compact Suffix Tree with way too high memory usage ~
     def __init__(self, text: str) -> None:
         self.tree = self.__build_tree__(text)
+        self.suffix_array = dict()
 
     def __str__(self) -> str:
         return json_dumps(self.tree, indent=4, sort_keys=True)
@@ -133,6 +134,20 @@ class SuffixTree:
                 pattern, node[edge], (text + edge), indeces)
 
         return indeces
+
+    #function returns a suffix array of current suffix tree as python 1D dict
+    def get_suffix_array(self):
+        self.__create_suffix_array(self.tree, '')
+        return self.suffix_array
+
+    def __create_suffix_array(self, tree: dict, s: str):
+        tree = collections.OrderedDict(sorted(tree.items()))
+        for branch in tree.keys():
+            s_tmp = s + branch
+            if isinstance(tree[branch], int):
+                self.suffix_array[tree[branch]] = s_tmp
+            elif isinstance(tree[branch], dict):
+                self.__create_suffix_array(tree[branch], s_tmp)
 
     # ======== AUFGABE 7b / Longest Repeated Substring ========
 
