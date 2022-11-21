@@ -139,6 +139,38 @@ class SuffixTree:
 
     # TODO
 
+    # ======== Aufgabe 8 / Memory Size ========
+
+    def get_size(self) -> int:
+        """Calculate the tree's total memory size.
+
+        Returns:
+            int: Size in bytes
+        """
+        return SuffixTree.__get_size__(self.tree)
+
+    @classmethod
+    def __get_size__(cls, node: dict, size: int = 0) -> int:
+        """Get the memory size of a (Sub)Tree.
+
+        Args:
+            node (dict): (Sub)Tree to calculate size of.
+            size (int, optional): Size buffer. Defaults to 0.
+
+        Returns:
+            int: Size in bytes
+        """
+        size += node.__sizeof__()   # size of node's dict or leaf's integer
+
+        if type(node) == int:
+            return size
+
+        for edge in node.keys():
+            size += edge.__sizeof__()   # size of edge label (string)
+            cls.__get_size__(node[edge], size)
+
+        return size
+
     # ======== Suffix Array ========
 
     def get_array(self) -> OrderedDict:
