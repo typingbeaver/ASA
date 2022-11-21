@@ -206,15 +206,28 @@ class SuffixTree:
 
     def get_array(self) -> OrderedDict:
         if self.suffix_array is None:
-            self.suffix_array = OrderedDict()
-            self.__create_suffix_array__(self.tree)
+            self.suffix_array = SuffixTree.__create_suffix_array__(
+                self.tree, array=OrderedDict())
         return self.suffix_array
 
-    def __create_suffix_array__(self, tree: dict, s: str = '') -> None:
-        for branch in sorted(tree.keys()):
-            node = tree[branch]
-            s_tmp = s + branch
-            if isinstance(node, int):
-                self.suffix_array[node] = s_tmp
-            elif isinstance(node, dict):
-                self.__create_suffix_array__(node, s_tmp)
+    @classmethod
+    def __create_suffix_array__(cls, node: dict, path: str = '', array: OrderedDict = None) -> OrderedDict:
+        """Creates a Suffix Array out of a Suffix Tree.
+
+        Args:
+            node (dict): (Sub)Tree to conquer
+            path (str, optional): Text of already passed edges. Defaults to "".
+            array (OrderedDict): Suffix Array
+
+        Returns:
+            OrderedDict: Suffix Array
+        """
+        if type(node) is int:
+            array[node] = path
+            return array
+
+        # Follow edges in alphabetical order
+        for edge in sorted(node.keys()):
+            cls.__create_suffix_array__(node[edge], (path + edge), array)
+
+        return array
