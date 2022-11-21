@@ -152,6 +152,6 @@ class SuffixTree:
             node = tree[branch]
             s_tmp = s + branch
             if isinstance(node, int):
-                self.suffix_array[s_tmp] = node
+                self.suffix_array[node] = s_tmp
             elif isinstance(node, dict):
                 self.__create_suffix_array__(node, s_tmp)
