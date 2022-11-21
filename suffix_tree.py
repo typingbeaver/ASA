@@ -167,7 +167,7 @@ class SuffixTree:
 
         for edge in node.keys():
             size += edge.__sizeof__()   # size of edge label (string)
-            cls.__get_size__(node[edge], size)
+            size = cls.__get_size__(node[edge], size)
 
         return size
 
