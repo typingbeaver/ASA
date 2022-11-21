@@ -1,6 +1,7 @@
 from json import dumps as json_dumps
 from collections import OrderedDict
 
+
 class SuffixTree:
     # ~ I'm a cheap ol' compact Suffix Tree with way too high memory usage ~
     def __init__(self, text: str) -> None:
@@ -137,7 +138,37 @@ class SuffixTree:
 
     # ======== AUFGABE 7b / Longest Repeated Substring ========
 
-    # TODO
+    def get_longest_repetition(self) -> str:
+        """Finds the longest repeated substring in the tree.
+
+        Returns:
+            str: Longest repeated substring
+        """
+        return SuffixTree.__get_longest_substring__(self.tree)
+
+    @classmethod
+    def __get_longest_substring__(cls, node: dict, parent_path: str = "", longest: str = "") -> str:
+        """Finds longest repeated substring in a suffix tree.
+
+        Args:
+            node (dict): (Sub-)Tree to search in
+            parent_path (str, optional): Already passed path. Defaults to "".
+            longest (str, optional): Longest known repetition. Defaults to "".
+
+        Returns:
+            str: Longest repeated substring
+        """
+        for edge in node.keys():
+            # check for splitting node
+            if type(node[edge]) is int:
+                continue
+
+            path = parent_path + edge
+            if len(path) > len(longest):
+                longest = path
+            longest = cls.__get_longest_substring__(node[edge], path, longest)
+
+        return longest
 
     # ======== Aufgabe 8 / Memory Size ========
 
