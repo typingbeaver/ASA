@@ -122,10 +122,10 @@ class SuffixTree:
         # Check for leaf/exit node
         # --> finished path & look for pattern
         if type(node) == int:
-            if text.__contains__(pattern):
+            if text.startswith(pattern):
                 indeces.append(node)
                 print(
-                    f"Found '{pattern}' in path '{text}. Adding index {node}.")
+                    f"'{pattern}' found in suffix '{text}' with index {node}.")
             return indeces
 
         # Go down every subtree
