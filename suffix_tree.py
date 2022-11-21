@@ -26,12 +26,12 @@ class SuffixTree:
 
         for i in range(len(text)):
             insertion = f"{text[i:]}$"
-            print(f"Inserting suffix {insertion}")
+            # print(f"Inserting suffix {insertion}")
 
             node, insertion = cls.__insertion_search__(tree, insertion)
             node[f"{insertion}"] = i+1
-            print(f"Inserted edge {insertion} with end node [{i+1}]")
-            print()
+            # print(f"Inserted edge {insertion} with end node [{i+1}]")
+            # print()
 
         return tree
 
@@ -50,19 +50,19 @@ class SuffixTree:
 
         # no edge with prefix
         if prefix == None:
-            print("Returning node for insertion." if edge == None
-                  else "End node found.")
+            # print("Returning node for insertion." if edge == None
+                #   else "End node found.")
             return node, text
 
         # prefix matches edge
         if edge == text[:prefix]:
             # follow edge, cut off prefix and repeat
-            print(f"Digging deeper on {edge = }...")
+            # print(f"Digging deeper on {edge = }...")
             return cls.__insertion_search__(node[edge], text[prefix:])
 
         # prefix matches edge partially: split edge and create new node
         prefix_edge, suffix_edge = edge[:prefix], edge[prefix:]
-        print(f"Splitting {edge = } into '{prefix_edge}' / '{suffix_edge}'")
+        # print(f"Splitting {edge = } into '{prefix_edge}' / '{suffix_edge}'")
         node[prefix_edge] = {suffix_edge: node.pop(edge)}
         return node[prefix_edge], text[prefix:]
 
@@ -87,19 +87,19 @@ class SuffixTree:
                 continue
 
             if edge == pattern:
-                print(f"Found edge with equal pattern: {edge = }, {pattern}")
+                # print(f"Found edge with equal pattern: {edge = }, {pattern}")
                 return (edge, len(pattern))
 
             # find biggest common prefix
             size_prefix = 1
             while True:
                 if not edge.startswith(pattern[:size_prefix+1]):
-                    print(f"Found prefix of size {size_prefix}: "
-                          f"{edge = }, {pattern[:size_prefix]}")
+                    # print(f"Found prefix of size {size_prefix}: "
+                        #   f"{edge = }, {pattern[:size_prefix]}")
                     return (edge, size_prefix)
                 size_prefix += 1
 
-        print("No matching edge found.")
+        # print("No matching edge found.")
         return (None, None)
 
     # ======== AUFGABE 7a / Pattern Search ========
