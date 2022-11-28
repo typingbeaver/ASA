@@ -162,17 +162,17 @@ class SuffixTree:
 
     # ======== Aufgabe 8 / Memory Size ========
 
-    def get_tree_size(self) -> tuple:
+    def get_size(self) -> tuple:
         """Calculate the tree's total memory size & size per character.
 
         Returns:
             tuple: (Total size in bytes, Size per character in bytes)
         """
-        size = SuffixTree.__get_tree_size__(self.tree)
+        size = SuffixTree.__get_size__(self.tree)
         return size, size/self.text_len
 
     @classmethod
-    def __get_tree_size__(cls, node: dict, size: int = 0) -> int:
+    def __get_size__(cls, node: dict, size: int = 0) -> int:
         """Get the memory size of a (Sub)Tree.
 
         Args:
@@ -189,12 +189,12 @@ class SuffixTree:
 
         for edge in node.keys():
             size += edge.__sizeof__()   # size of edge label (string)
-            size = cls.__get_tree_size__(node[edge], size)
+            size = cls.__get_size__(node[edge], size)
 
         return size
 
-    def print_tree_size(self) -> None:
-        total_size, char_size = self.get_tree_size()
+    def print_size(self) -> None:
+        total_size, char_size = self.get_size()
         print(f"Total size: {DataSize(total_size):.2a}")
         print(f"==> {DataSize(char_size):.2a} per character")
 
