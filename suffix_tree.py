@@ -206,6 +206,14 @@ class SuffixArray:
         self.text_len = suffix_tree.text_len
         self.array = self.__create_array__(suffix_tree.tree, array=list())
 
+    def __str__(self) -> str:
+        num_len = len(str(self.text_len+1))
+        s = ""
+        for suffix in self.array:
+            s += f"{suffix[0]:>{num_len}}: {suffix[1]}\n"
+
+        return s
+
     # ======== Construction ========
     @classmethod
     def __create_array__(cls, node: dict, path: str = '', array: list = None) -> list:
