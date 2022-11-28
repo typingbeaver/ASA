@@ -202,6 +202,7 @@ class SuffixTree:
 class SuffixArray:
 
     def __init__(self, suffix_tree: SuffixTree) -> None:
+        self.text_len = suffix_tree.text_len
         self.array = self.__create_array__(suffix_tree.tree, array=list())
 
     # ======== Construction ========
@@ -235,4 +236,15 @@ class SuffixArray:
     # ======== Memory Size ========
 
     def get_size(self) -> int:
-        pass
+        size = self.array.__sizeof__()
+        for item in self.array:
+            size += item.__sizeof__()
+            size += item[0].__sizeof__()
+            size += item[1].__sizeof__()
+
+        return size, size/self.text_len
+
+    def print_size(self) -> None:
+        total_size, char_size = self.get_size()
+        print(f"Total size: {DataSize(total_size):.2a}")
+        print(f"==> {DataSize(char_size):.2a} per character")
