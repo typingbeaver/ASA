@@ -1,7 +1,8 @@
-from json import dumps as json_dumps
+from bisect import bisect
 from datasize import DataSize
+from json import dumps as json_dumps
 
-## //////////////// SUFFIX TREE ////////////////
+# //////////////// SUFFIX TREE ////////////////
 class SuffixTree:
     # ~ I'm a cheap ol' compact Suffix Tree with way too high memory usage ~
     def __init__(self, text: str) -> None:
@@ -94,7 +95,7 @@ class SuffixTree:
 
     # ======== AUFGABE 7a / Pattern Search ========
 
-    ## Awfully lazy implementation <( ~.~ )>
+    # Awfully lazy implementation <( ~.~ )>
     def find_pattern(self, pattern: str) -> list:
         return SuffixTree.__pattern_search__(pattern, self.tree, indeces=[])
 
@@ -198,7 +199,7 @@ class SuffixTree:
         print(f"==> {DataSize(char_size):.2a} per character")
 
 
-## //////////////// SUFFIX ARRAY ////////////////
+# //////////////// SUFFIX ARRAY ////////////////
 class SuffixArray:
 
     def __init__(self, suffix_tree: SuffixTree) -> None:
@@ -231,7 +232,15 @@ class SuffixArray:
     # ======== Pattern Search ========
 
     def find_pattern(self, pattern: str) -> list:
-        pass
+        indices = []
+
+        index = bisect(self.array, pattern, key=lambda set: set[1])
+        while (set := self.array[index])[1].startswith(pattern):
+            print(f"'{pattern}' found at index {set[0]}: '{set[1]}'")
+            indices.append(set[0])
+            index += 1
+
+        return indices
 
     # ======== Memory Size ========
 
