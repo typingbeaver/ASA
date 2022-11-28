@@ -95,7 +95,7 @@ class SuffixTree:
 
     # ======== AUFGABE 7a / Pattern Search ========
 
-    # Awfully lazy implementation <( ~.~ )>
+    # Awfully inefficient implementation, but too lazy to edit __insertion_search__ to reduce tree parsing <( ~.~ )>
     def find_pattern(self, pattern: str) -> list:
         return SuffixTree.__pattern_search__(pattern, self.tree, indeces=[])
 
@@ -208,11 +208,11 @@ class SuffixArray:
 
     def __str__(self) -> str:
         num_len = len(str(self.text_len+1))
-        s = ""
+        string = ""
         for suffix in self.array:
-            s += f"{suffix[0]:>{num_len}}: {suffix[1]}\n"
+            string += f"{suffix[0]:>{num_len}}: {suffix[1]}\n"
 
-        return s
+        return string
 
     # ======== Construction ========
     @classmethod
@@ -240,24 +240,37 @@ class SuffixArray:
     # ======== Pattern Search ========
 
     def find_pattern(self, pattern: str) -> list:
+        """Finds a pattern in the Suffix Array with binary search.
+
+        Args:
+            pattern (str): Pattern to look for
+
+        Returns:
+            list: Indices of pattern positions in text
+        """
         indices = []
 
-        index = bisect(self.array, pattern, key=lambda set: set[1])
-        while (set := self.array[index])[1].startswith(pattern):
-            print(f"'{pattern}' found at index {set[0]}: '{set[1]}'")
-            indices.append(set[0])
+        index = bisect(self.array, pattern, key=lambda suffix: suffix[1])
+        while (suffix := self.array[index])[1].startswith(pattern):
+            print(f"'{pattern}' found at index {suffix[0]}: '{suffix[1]}'")
+            indices.append(suffix[0])
             index += 1
 
         return indices
 
     # ======== Memory Size ========
 
-    def get_size(self) -> int:
-        size = self.array.__sizeof__()
-        for item in self.array:
-            size += item.__sizeof__()
-            size += item[0].__sizeof__()
-            size += item[1].__sizeof__()
+    def get_size(self) -> tuple:
+        """Calculate the array's total memory size & size per character.
+
+        Returns:
+            tuple: (Total size in bytes, Size per character in bytes)
+        """
+        size = self.array.__sizeof__()      # array
+        for suffix in self.array:
+            size += suffix.__sizeof__()       # set
+            size += suffix[0].__sizeof__()    # (index) integer
+            size += suffix[1].__sizeof__()    # (suffix) string
 
         return size, size/self.text_len
 
