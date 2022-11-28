@@ -61,7 +61,6 @@ class SuffixTree:
         node[prefix_edge] = {suffix_edge: node.pop(edge)}
         return node[prefix_edge], text[prefix:]
 
-    ## Awfully lazy implementation <( ~.~ )>
     @staticmethod
     def __find_max_prefix__(node: dict, pattern: str) -> tuple:
         """Find a matching edge with biggest common prefix.
@@ -95,6 +94,7 @@ class SuffixTree:
 
     # ======== AUFGABE 7a / Pattern Search ========
 
+    ## Awfully lazy implementation <( ~.~ )>
     def find_pattern(self, pattern: str) -> list:
         return SuffixTree.__pattern_search__(pattern, self.tree, indeces=[])
 
