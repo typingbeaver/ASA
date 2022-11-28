@@ -1,8 +1,7 @@
 from json import dumps as json_dumps
-from collections import OrderedDict
 from datasize import DataSize
 
-
+## //////////////// SUFFIX TREE ////////////////
 class SuffixTree:
     # ~ I'm a cheap ol' compact Suffix Tree with way too high memory usage ~
     def __init__(self, text: str) -> None:
@@ -198,32 +197,42 @@ class SuffixTree:
         print(f"Total size: {DataSize(total_size):.2a}")
         print(f"==> {DataSize(char_size):.2a} per character")
 
-    # ======== Suffix Array ========
 
-    def get_array(self) -> OrderedDict:
-        if self.suffix_array is None:
-            self.suffix_array = SuffixTree.__create_suffix_array__(
-                self.tree, array=OrderedDict())
-        return self.suffix_array
+## //////////////// SUFFIX ARRAY ////////////////
+class SuffixArray:
 
+    def __init__(self, suffix_tree: SuffixTree) -> None:
+        self.array = self.__create_array__(suffix_tree.tree, array=list())
+
+    # ======== Construction ========
     @classmethod
-    def __create_suffix_array__(cls, node: dict, path: str = '', array: OrderedDict = None) -> OrderedDict:
+    def __create_array__(cls, node: dict, path: str = '', array: list = None) -> list:
         """Creates a Suffix Array out of a Suffix Tree.
 
         Args:
             node (dict): (Sub)Tree to conquer
             path (str, optional): Text of already passed edges. Defaults to "".
-            array (OrderedDict): Suffix Array
+            array (list): Suffix Array
 
         Returns:
-            OrderedDict: Suffix Array
+            list: Suffix Array
         """
-        if cls.is_leaf(node):
-            array[node] = path
+        if SuffixTree.is_leaf(node):
+            array.append((node, path))
             return array
 
         # Follow edges in alphabetical order
         for edge in sorted(node.keys()):
-            cls.__create_suffix_array__(node[edge], (path + edge), array)
+            cls.__create_array__(node[edge], (path + edge), array)
 
         return array
+
+    # ======== Pattern Search ========
+
+    def find_pattern(self, pattern: str) -> list:
+        pass
+
+    # ======== Memory Size ========
+
+    def get_size(self) -> int:
+        pass
